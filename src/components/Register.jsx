@@ -3,17 +3,33 @@ import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
-  
+  const [formData, setFormData] = useState({
+    name: "",email: "",password: "",confirmPassword: "",
+  });
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleRegister = (e) => {
     e.preventDefault();
-    localStorage.setItem("user", JSON.stringify(formData));
+
+   
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+
+    const userData = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+    };
+    console.log(userData)
+
+    localStorage.setItem("user", JSON.stringify(userData));
     alert("Registration successful!");
-    console.log(formData)
     navigate("/login");
   };
 
@@ -45,6 +61,15 @@ function Register() {
           onChange={handleChange}
           required
         />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+        />
+
         <button type="submit">Register</button>
       </form>
 
